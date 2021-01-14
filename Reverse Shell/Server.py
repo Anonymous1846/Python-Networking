@@ -17,6 +17,18 @@ try:
 	print('Waiting for Someone to Connect !')
 	conn,addr=soc.accept()
 	print(f'Now we \'re connected to IP: {addr[0]} and Listening On Port: {addr[1]}')
+	cmd=''
+	print('Ready to Chat !')
+	while True:
+		if cmd.lower()=='quit':
+			conn.close()
+			soc.close()
+			print('Bye Client !')
+			break
+		cmd=input('>>')
+		print('Server: ',cmd)
+		conn.send(cmd.encode())
+		print('Client: ',conn.recv(1024).decode())
 	print('Client Be Like:',conn.recv(1024).decode())
 except socket.error as s_err:
 	print('The Socket Creation Error !'+str(s_err))
