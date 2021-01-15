@@ -19,10 +19,11 @@ print('Now the server can listen upto 5 Clients Without Network Timeout !')
 server_socket.listen(5)
 conn,addr=server_socket.accept()
 print(f'Now we\'re connected to {addr[0]}, which is on Port {addr[1]}')
-with open('Hello.txt','rb') as f:
-    some_text=f.read()
-image_data=pickle.dumps(some_text)
-size=os.path.getsize('Hello.txt')
+file=open('Pani.jpg','rb')
+size=os.path.getsize('pani.jpg')
+buff=file.read(1024)
+while (buff):
+    conn.send(buff)
+    buff=file.read(1024)
+
 conn.send(str(size).encode())
-conn.send(image_data)
-print(image_data)

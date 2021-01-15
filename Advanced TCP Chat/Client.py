@@ -14,13 +14,14 @@ PORT=43599
 HOST='127.0.0.1'
 client_socket.connect((HOST,PORT))
 print(f'Conencted to {HOST}')
-file_size=int(client_socket.recv(1024).decode())
-print(f'The expected size of the file is {file_size} bytes')
 
-print(f'Recieving {file_size} bytes')
-data=pickle.loads(client_socket.recv(file_size))
 
-with open('NewFile.txt','wb') as f:
-     f.write(data.encode())
+with open('NewFile.jpg','wb') as f:
+     while True:
+          data=client_socket.recv(1024)
+          if not data:
+               break
+          else:
+               f.write(data)
 print('Finishing............File Saved at ',str(os.getcwd()))
 
