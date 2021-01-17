@@ -13,7 +13,7 @@ print(f'Connected to {HOST} {PORT}')
 
 def send_msg():
     while 1:
-        message=f'{username}: {input(">>")}'
+        message=f'{username}: {input(">>")}'.encode()
         client_socket.send(message)
 def get_msg():
     while 1:

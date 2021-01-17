@@ -16,7 +16,7 @@ server_socket.listen()
 #this method is used to broadcast the message to the rest of the clients connected to the server 
 def broadcast_msg(message):
     for client in clients:
-        client.send(message)
+        client.send(message.encode())
 def handle(client):
     while 1:
         try:
