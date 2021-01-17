@@ -6,10 +6,10 @@ clients=[]
 usernames=[]
 #avoiding hardcoded ip addresses
 HOST=socket.gethostbyname(socket.gethostname())
-PORT=45000
+PORT=46000
 #creating a tcp server to bind the Ip address and the Port 
 server_socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print(sp.Green+f'Binding {HOST} to the Port {PORT}'+sp.Reset)
+print(sp.OKGREEN+f'Binding {HOST} to the Port {PORT}'+sp.RESET)
 server_socket.bind((HOST,PORT))
 print('The Server is now Listening for Connections.')
 server_socket.listen()
@@ -21,7 +21,7 @@ def handle(client):
     while 1:
         try:
         #if some error occur in the network we remove the client from the client list and also from the nickname list !'
-            message=client.recv(1024)
+            message=client.recv(1024).decode()               
             broadcast_msg(message)
         except:
             index_of_client=clients.index(client)

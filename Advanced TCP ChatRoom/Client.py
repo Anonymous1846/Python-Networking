@@ -1,20 +1,23 @@
 import socket
 import threading
-
+from SpecialChar import SpecialChar as sp
 #avoiding hardcoded ip addresses
 HOST=socket.gethostbyname(socket.gethostname())
-PORT=45000
+PORT=46000
 #the username inputted by the user 
 username=input('Please Enter The Username: ')
 #creating a tcp server to bind the Ip address and the Port 
 client_socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((HOST,PORT))
-print(f'Connected to {HOST} {PORT}')
+print(sp.BOLD+f'Connected to {HOST} {PORT}'+sp.RESET)
 
 def send_msg():
     while 1:
-        message=f'{username}: {input(">>")}'.encode()
-        client_socket.send(message)
+        message=f'{username} :'+input('>>')
+        if 'exit !' in message:
+            client_socket.close()
+            break
+        client_socket.send(message.encode())
 def get_msg():
     while 1:
         try:
