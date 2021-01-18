@@ -27,10 +27,20 @@ class Server:
             try:
                 #message from one client will be broadcasted to another clients on the networks !
                 message_from_client=client.recv(1024)
+                if message_from_client.startswith('->'):
+                    client.send((message_from_client.decode()[3:message_from_client.decode().index(':')]).encode())
                 #if the server recieves a request for showing the currently active it shows the list of users to the client only !
                 if message_from_client.decode().lower()=='listusers':
                     client.send(f'Currently Active Users: {self.usernames}'.encode())
-
+                    
+                # if message_from_client.decode().lower().startswith('->'):
+                #     prvt_client=message_from_client.decode().lower()[2:message_from_client.decode().lower().index(':')]
+                #     if prvt_client in self.usernames:
+                #         prvt_msg=message_from_client.decode().lower()[message_from_client.decode().lower().index(':'):]
+                #         pr_client=self.clients[self.usernames.index(prvt_client)]
+                #         pr_client.send(f'{self.usernames[self.clients.index(client)]}: {prvt_msg}'.encode())
+                #     else:
+                #         continue
                 self.broadcast_msg(message_from_client)
             except:
                 #this will handle the exception if any client abruptly interfere in the connection or disconnect !

@@ -22,6 +22,10 @@ class Client:
             try:
                 #the username sending and recieving procedure 
                 message=self.client_socket.recv(1024).decode()
+                #some times the listusers commands also appear at the current user's terminal too
+                if 'listusers' in message:
+                    continue
+                #we just escape it (message)
                 if message=='Username:':
                     self.client_socket.send(self.username.encode())
                 else:
@@ -40,10 +44,11 @@ class Client:
             #sending the request to show the list of currently logged in users to the chat bot private msg to one client only !
             if message.replace(self.username+': ','').lower()=='listusers':
                 #removing the name of the client and showing only the listusers command !
-                self.client_socket.send((message.replace(self.username+': ','').lower()).encode())   
+                self.client_socket.send(message.replace(self.username+': ','').lower().encode())   
                 continue
-            #if message.replace(self.username+': ','').lower().startswith('->'):
-    
+            if message.replace(self.username+': ','').lower().startswith('->'):
+                self.client_socket.send((message[message.rindex('->'):]).encode())   
+                
             #if the user sends a exit request then he opt out of the chat room if he presses the y button otherwise he can continue !
             if message.replace(self.username+': ','').lower()=='exit':
                 print('Are you sure you want to exit ?(y/n)')
