@@ -43,8 +43,11 @@ open_ports=[]
 
 #the timer function will be used as a decorator for the port scan function
 def timer(func):
+    #the wrapper function will take optional arguements/key word args
     def _timer(*args,**kwargs):
+        #calculating the start time in secs
         start_time=time.time()
+        #returns something if is bound to return 
         return_value=func(*args,**kwargs)
         print(f'The Time Taken for The Scan is {round(time.time()-start_time,3)} Seconds...')
         return return_value

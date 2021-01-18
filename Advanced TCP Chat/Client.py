@@ -9,7 +9,7 @@ class Client:
     def __init__(self):
         #the port number and non-hardcoded host-address/name
         self.HOST=socket.gethostbyname(socket.gethostname())
-        self.PORT=23560
+        self.PORT=23561
         
         #tcp socket 
         self.client_socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,9 +37,17 @@ class Client:
         while True:
             #the message will be sent in the form of username : Message  
             message=f'{self.username}: {input(">>")}'
+            #sending the request to show the list of currently logged in users to the chat bot private msg to one client only !
+            if message.replace(self.username+': ','').lower()=='listusers':
+                #removing the name of the client and showing only the listusers command !
+                self.client_socket.send((message.replace(self.username+': ','').lower()).encode())   
+                continue
+            #if message.replace(self.username+': ','').lower().startswith('->'):
+    
             #if the user sends a exit request then he opt out of the chat room if he presses the y button otherwise he can continue !
             if message.replace(self.username+': ','').lower()=='exit':
                 print('Are you sure you want to exit ?(y/n)')
+               
                 ans=input('>>')
                 if ans=='y':
                     print('Exiting the chat room.............')

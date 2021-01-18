@@ -8,7 +8,7 @@ class Server:
     def __init__(self):
         #the port number and non-hardcoded host-address/name
         self.HOST=socket.gethostbyname(socket.gethostname())
-        self.PORT=23560
+        self.PORT=23561
         #initializing the empty lists 
         self.clients=[]
         self.usernames=[]
@@ -27,7 +27,10 @@ class Server:
             try:
                 #message from one client will be broadcasted to another clients on the networks !
                 message_from_client=client.recv(1024)
-                
+                #if the server recieves a request for showing the currently active it shows the list of users to the client only !
+                if message_from_client.decode().lower()=='listusers':
+                    client.send(f'Currently Active Users: {self.usernames}'.encode())
+
                 self.broadcast_msg(message_from_client)
             except:
                 #this will handle the exception if any client abruptly interfere in the connection or disconnect !
