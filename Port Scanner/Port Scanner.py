@@ -23,17 +23,10 @@ except Exception as e:
     exit(0)
     #for system command line arguements !
 import sys
-class color:
-   #ansii escape sequences for python print statements !
-   #non-bold statements !
-   NORMAL='\033[0m'
-   BOLD = '\033[1m'
-   #color for text !
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   WHITE ='\u001b[37m'
+#initializing the colorama
+import colorama
+colorama.init(convert=True)
+
 #Thread lock for avoiding multiple threads to crumple the data(output )
 print_lock=threading.Lock()
 #The list will hold the open ports
@@ -49,7 +42,7 @@ def timer(func):
         start_time=time.time()
         #returns something if is bound to return 
         return_value=func(*args,**kwargs)
-        print(f'The Time Taken for The Scan is {round(time.time()-start_time,3)} Seconds...')
+        print(colorama.Fore.GREEN+f'The Time Taken for The Scan is {round(time.time()-start_time,3)} Seconds...'+colorama.Fore.WHITE)
         return return_value
         #returning just the function object and not the call to the function !
     return _timer
@@ -62,7 +55,7 @@ def scan_me(addr,port):
         #print lock enabled to current object, so that is not used by other threads !
         with print_lock:
             open_ports.append(port) 
-            print(color.BLUE+f'Port: {port}'+color.GREEN+' is Open.'+color.WHITE)
+            print(colorama.Fore.BLUE+f'Port: {port}'+colorama.Fore.GREEN+' is Open.'+colorama.WHITE)
 #the decorator timer for calculating the time taken for scanning !
 @timer
 def port_scan():
@@ -78,10 +71,10 @@ def port_scan():
         #ascci art for The Heading!
         heading=pyfiglet.figlet_format('Whose Port')
         print(heading)
-        print(color.BOLD+'Version 1.101'+color.NORMAL)
+        print(colorama.Fore.CYAN+'Version 1.101'+colorama.Fore.WHITE)
         print('-'*200)
         #the time at starting of the scan!
-        starting_time=time.time()
+        
         print(f'Scanning the IP address: {addr},Port range from {port_start} to {port_end}')
         # we will iterate from starting port to ending port+1(ending port is exclusive ) !
         with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executer:
@@ -90,10 +83,10 @@ def port_scan():
                 executer.submit(scan_me,addr,i)
             #the ports which are open will be displayed !
         
-        print(color.GREEN+f'Scanning IP {addr} finished....{len(open_ports)} Open Ports !'+color.WHITE+f'Total taken: {round(time.time()-starting_time,2)} Seconds.')
+        
     else:
         #ansii character escape for Red color and back to normal !
-        print('Correct usage of '+color.BOLD+color.RED+'Command is python Port Scanner.py <ip-address> <starting-port> <ending-port>'+color.NORMAL+color.WHITE)
+        print('Correct usage of '+colorama.Fore.RED+'Command is python Port Scanner.py <ip-address> <starting-port> <ending-port>'+colorama.Fore.WHITE)
         print('Exiting Program.......')
         exit(0)
 
