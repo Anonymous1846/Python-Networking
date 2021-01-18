@@ -21,7 +21,10 @@ class Client:
         while True:
             try:
                 #the username sending and recieving procedure 
+                #we have to first check whether the server has send the broadcast to listuser, so that we can skip that part 
                 message=self.client_socket.recv(1024).decode()
+                if message=='listusers':
+                    continue
                 if message=='Username:':
                     self.client_socket.send(self.username.encode())
                 else:

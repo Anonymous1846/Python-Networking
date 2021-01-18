@@ -3,6 +3,7 @@ import socket
 import colorama
 from colorama import Style as s
 from colorama import Fore as f
+from datetime import datetime
 colorama.init(convert=True)
 class Server:
     def __init__(self):
@@ -18,6 +19,9 @@ class Server:
         self.server_socket.bind((self.HOST, self.PORT))
         print(s.BRIGHT+f.BLUE+'The Server can now Listen Up 100 Clients'+f.RESET)
         self.server_socket.listen(100)
+        now=datetime.now()
+        dt_string = now.strftime("Current Date: %d/%m/%Y Current Time:%H:%M:%S")
+        print(dt_string) 
     #the method for broadcasting the message to the clients in the clients list 
     def broadcast_msg(self,message):
         for client in self.clients:
@@ -30,7 +34,7 @@ class Server:
                 #if the server recieves a request for showing the currently active it shows the list of users to the client only !
                 if message_from_client.decode().lower()=='listusers':
                     client.send(f'Currently Active Users: {self.usernames}'.encode())
-
+                    
                 self.broadcast_msg(message_from_client)
             except:
                 #this will handle the exception if any client abruptly interfere in the connection or disconnect !
