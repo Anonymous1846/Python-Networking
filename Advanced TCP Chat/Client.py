@@ -1,10 +1,15 @@
 import socket
 import threading
+#color used for ansi escape seqeunce !
+import colorama
+from colorama import Style as s
+from colorama import Fore as f
+colorama.init(convert=True)
 class Client:
     def __init__(self):
         #the port number and non-hardcoded host-address/name
         self.HOST=socket.gethostbyname(socket.gethostname())
-        self.PORT=23512
+        self.PORT=23560
         
         #tcp socket 
         self.client_socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -12,25 +17,37 @@ class Client:
         self.username=input('Please Enter Your Username: ')
     #the two methods will run on different threads
     def recieve_msg(self):
+        #the client will indefinetely recieve messages from the sever broadcast !
         while True:
-            message=self.client_socket.recv(1024).decode()
-            if message=='Username:':
-                self.client_socket.send(self.username.encode())
-            else:
-                print(message)
+            try:
+                #the username sending and recieving procedure 
+                message=self.client_socket.recv(1024).decode()
+                if message=='Username:':
+                    self.client_socket.send(self.username.encode())
+                else:
+                    print(message)
+            except:
+                print('Connection has been broken')
+                self.client_socket.close()
+                break
            
                 
     def send_msg(self):
+        #the user can send the messages as long the user is connected to the chat room aka sthe Server 
         while True:
+            #the message will be sent in the form of username : Message  
             message=f'{self.username}: {input(">>")}'
+            #if the user sends a exit request then he opt out of the chat room if he presses the y button otherwise he can continue !
             if message.replace(self.username+': ','').lower()=='exit':
                 print('Are you sure you want to exit ?(y/n)')
                 ans=input('>>')
                 if ans=='y':
                     print('Exiting the chat room.............')
                     self.client_socket.close()
+                    break
                 else:
                     continue
+            
             self.client_socket.send(message.encode())
 
 client =Client()
