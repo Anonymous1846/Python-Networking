@@ -14,12 +14,19 @@ The main agenda of this repository are:
   <ul>
     <li>Can connect remotely to a computer</li>
     <li>Execute command line operations</li>
-    
+    <li>Demonstration of a backdoor</li>
   </ul>
   <li>Fast Port Scanner</li>
+  <b>Usage python Port Scanner.py ip starting_port ending_range</b>
   <ul>
     <li>Attractive Command Line Interface</li>
     <li>Fast and Efficient</li>
     <li>Can scan from any particular range(0-65535)</li>
   </ul>
+</ul>
+
+The main requirements of the above programs are:
+<ul>
+<li>Colorama</li>
+<li>Pyfiglet</li>
 </ul>

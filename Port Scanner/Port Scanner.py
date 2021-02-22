@@ -12,16 +12,7 @@ import concurrent.futures
 #thread lock, so that multiple threads cannot access the same resources
 import threading
 #for ascii art
-try:
-    import pyfiglet
-    #if not found on the computer it will downlod the module by using the command pip install pyfiglet
-except Exception as e:
-    print('The Module is not found on Your System.......')
-    print('Installing pyfiglet')
-    subprocess.run('pip install pyfiglet')
-    print('Installation Finished......!\nNow you can run your python script in the format python Port Scanner.py <ip-address> <starting range> <ending-range>')
-    exit(0)
-    #for system command line arguements !
+import pyfiglet
 import sys
 #initializing the colorama
 import colorama
@@ -55,7 +46,7 @@ def scan_me(addr,port):
         #print lock enabled to current object, so that is not used by other threads !
         with print_lock:
             open_ports.append(port) 
-            print(colorama.Fore.BLUE+f'Port: {port}'+colorama.Fore.GREEN+' is Open.'+colorama.WHITE)
+            print(colorama.Fore.BLUE+f'Port: {port} is Open.'+colorama.Fore.WHITE)
 #the decorator timer for calculating the time taken for scanning !
 @timer
 def port_scan():
@@ -82,7 +73,8 @@ def port_scan():
                 #passing the fucntion aguements ip address and the port number in this case, from sys agrv[2] to sys.args[3]
                 executer.submit(scan_me,addr,i)
             #the ports which are open will be displayed !
-        
+        print(colorama.Fore.GREEN+f'Scanning IP {addr} finished....{len(open_ports)} Open Ports !'+colorama.Fore.WHITE)
+           
         
     else:
         #ansii character escape for Red color and back to normal !

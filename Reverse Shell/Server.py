@@ -11,7 +11,7 @@ print('-'*100)
 #preventing hardcoded address !
 HOST=socket.gethostbyname(socket.gethostname())
 #choosing a port number between 0-65535(reserved ones are between 0-1023)
-PORT=55555
+PORT=9912
 try:
 	#creating a tcp socket !
 	server=socket.socket()
