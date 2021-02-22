@@ -23,6 +23,8 @@ class Client:
                 #the username sending and recieving procedure 
                 #we have to first check whether the server has send the broadcast to listuser, so that we can skip that part 
                 message=self.client_socket.recv(1024).decode()
+                if message.lower()=='listusers':
+                    continue
                 if message=='Username:':
                     self.client_socket.send(self.username.encode())
                 else:
@@ -42,9 +44,7 @@ class Client:
             if message.replace(self.username+': ','').lower()=='listusers':
                 #removing the name of the client and showing only the listusers command !
                 self.client_socket.send(message.replace(self.username+': ','').lower().encode())   
-                continue
-            if message.replace(self.username+': ','').lower().startswith('->'):
-                self.client_socket.send((message[message.rindex('->'):]).encode())   
+                continue  
                 
             #if the user sends a exit request then he opt out of the chat room if he presses the y button otherwise he can continue !
             if message.replace(self.username+': ','').lower()=='exit':
